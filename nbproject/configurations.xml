@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="80">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>include/Skin/Action.h</itemPath>
+      <itemPath>include/Skin/ActionCallback.h</itemPath>
+      <itemPath>include/Skin/ActionFocus.h</itemPath>
+      <itemPath>include/Skin/Box.h</itemPath>
+      <itemPath>include/Skin/Color.h</itemPath>
+      <itemPath>include/Skin/DynamicData.h</itemPath>
+      <itemPath>include/Skin/DynamicType.h</itemPath>
+      <itemPath>include/Skin/Effect.h</itemPath>
+      <itemPath>include/Skin/Element.h</itemPath>
+      <itemPath>include/Skin/ElementButton.h</itemPath>
+      <itemPath>include/Skin/ElementImage.h</itemPath>
+      <itemPath>include/Skin/ElementInput.h</itemPath>
+      <itemPath>include/Skin/ElementLabel.h</itemPath>
+      <itemPath>include/Skin/ElementList.h</itemPath>
+      <itemPath>include/Skin/Engine.h</itemPath>
+      <itemPath>include/Skin/Image.h</itemPath>
+      <itemPath>include/Skin/Module.h</itemPath>
+      <itemPath>include/Skin/Screen.h</itemPath>
+      <itemPath>include/Skin/Text.h</itemPath>
+      <itemPath>include/Skin/Vector.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/Action.cpp</itemPath>
+      <itemPath>src/ActionCallback.cpp</itemPath>
+      <itemPath>src/ActionFocus.cpp</itemPath>
+      <itemPath>src/Box.cpp</itemPath>
+      <itemPath>src/Color.cpp</itemPath>
+      <itemPath>src/Effect.cpp</itemPath>
+      <itemPath>src/Element.cpp</itemPath>
+      <itemPath>src/ElementButton.cpp</itemPath>
+      <itemPath>src/ElementImage.cpp</itemPath>
+      <itemPath>src/ElementInput.cpp</itemPath>
+      <itemPath>src/ElementLabel.cpp</itemPath>
+      <itemPath>src/ElementList.cpp</itemPath>
+      <itemPath>src/Engine.cpp</itemPath>
+      <itemPath>src/Image.cpp</itemPath>
+      <itemPath>src/Screen.cpp</itemPath>
+      <itemPath>src/Text.cpp</itemPath>
+      <itemPath>src/Vector.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="2">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <rebuildPropChanged>true</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+          <warningLevel>2</warningLevel>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>SDL</linkerLibLibItem>
+            <linkerLibLibItem>SDL_gfx</linkerLibLibItem>
+            <linkerLibLibItem>SDL_image</linkerLibLibItem>
+            <linkerLibLibItem>SDL_ttf</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+    </conf>
+    <conf name="Release" type="2">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+    </conf>
+  </confs>
+</configurationDescriptor>
