@@ -13,10 +13,12 @@
 
 #include <string>
 
-#include <SDL/SDL_ttf.h>
-
 #define DEFAULT_FONT "default.ttf"
 #define DEFAULT_FONTSIZE 24
+
+struct SDL_Surface;
+struct _TTF_Font;
+typedef _TTF_Font TTF_Font;
 
 namespace Skin
 {
@@ -24,7 +26,7 @@ namespace Skin
     {
     private:
         Vectorf mPosition;
-        float mRotation;
+        double mRotation;
         Vectorf mScale;
         std::string mText;
         TTF_Font* mFont;
@@ -39,7 +41,7 @@ namespace Skin
         virtual ~Text();
         
         const Vectorf& getPosition() const;
-        float getRotation() const;
+        double getRotation() const;
         const Vectorf& getScale() const;
         const std::string& getText() const;
         const std::string& getName() const;
@@ -50,16 +52,17 @@ namespace Skin
         int getMaxHeight() const;
         
         void setPosition(const Vectorf&);
-        void setPosition(float x, float y);
-        void setRotation(float rotation);
+        void setPosition(double x, double y);
+        void setRotation(double rotation);
         void setScale(const Vectorf&);
-        void setScale(float x, float y);
+        void setScale(double x, double y);
         void setText(const std::string& text);
         void setName(const std::string& fontname);
         void setSize(unsigned int fontsize);
         void setColor(const Color& color);
         
         void draw(SDL_Surface* drawSurface);
+		void parse(const std::string&, const std::string&);
         
     private:
         void loadFont(const std::string&, unsigned int);

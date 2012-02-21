@@ -11,7 +11,9 @@
 #include "Skin/Vector.h"
 #include "Skin/Color.h"
 
-#include <SDL/SDL.h>
+#include <string>
+
+struct SDL_Surface;
 
 namespace Skin
 {
@@ -35,14 +37,15 @@ namespace Skin
         const Color& getOutlineColor() const;
         
         void setPosition(const Vectorf&);
-        void setPosition(float x, float y);
+        void setPosition(double x, double y);
         void setSize(const Vectorf&);
-        void setSize(float x, float y);
+        void setSize(double x, double y);
         void setRadius(int);
         void setBoxColor(const Color&);
         void setOutlineColor(const Color&);
         
         void draw(SDL_Surface* drawSurface);
+		void parse(const std::string&, const std::string&);
     };
 }
 

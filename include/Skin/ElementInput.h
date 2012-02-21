@@ -20,37 +20,26 @@ namespace Skin
     private:
         Text mLabel;
         Box mBox;
-        float mSize;
+        double mSize;
         std::string mText;
         bool mSelect;
         
     public:
-        ElementInput(Screen&, const Vectorf&, float);
+        ElementInput(Screen&, const Vectorf&, double = 0);
         virtual ~ElementInput();
         
+		Text& label();
+		Box& box();
+
         virtual std::string getData(const std::string&);
         
-        virtual bool collide(float x, float y);
+		virtual void parse(const std::string&, const std::string&);
+        virtual bool collide(double x, double y);
         virtual void draw(SDL_Surface* displaySurface);
         virtual void event(const SDL_Event&);
         
         virtual void onFocus();
         virtual void onIdle();
-        
-        void setFontname(const std::string&);
-        void setFontsize(unsigned int);
-        void setFontcolor(const Color&);
-        void setBoxColor(const Color&);
-        void setOutlineColor(const Color&);
-        void setRadius(int);
-        void setSize(float);
-        void setText(const std::string&);
-        
-        const std::string& getFontname() const;
-        unsigned int getFonsize() const;
-        const Color& getFontcolor() const;
-        float getSize() const;
-        const std::string& getText() const;
     };
 }
 

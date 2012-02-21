@@ -34,20 +34,21 @@ namespace Skin
         unsigned int mMax;
         
     public:
-        ElementList(Screen&, const Vectorf&, const std::string&, const Vectorf&);
+        ElementList(Screen&, const Vectorf&, const std::string& = "", const Vectorf& = Vectorf());
         virtual ~ElementList();
-        
+
+		Text& label();
+		Box& box();
+
         virtual std::string getData(const std::string&);
         
-        virtual bool collide(float x, float y);
+		virtual void parse(const std::string&, const std::string&);
+        virtual bool collide(double x, double y);
         virtual void draw(SDL_Surface* displaySurface);
-        virtual void update(float);
+        virtual void update(double);
         
         virtual void onUp();
         virtual void onDown();
-        
-        void setFontname(const std::string&);
-        void setFontsize(unsigned int);
         
     private:
         void parseDynamicData();

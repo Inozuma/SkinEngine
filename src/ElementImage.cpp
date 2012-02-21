@@ -17,14 +17,28 @@ mFilename(imageFile),
 mOriginH(0),
 mOriginV(0)
 {
-    mImage.openFile(mFilename);
 }
 
 ElementImage::~ElementImage()
 {
 }
 
-bool ElementImage::collide(float x, float y)
+Image& ElementImage::image()
+{
+	return mImage;
+}
+
+void ElementImage::parse(const std::string& key, const std::string& value)
+{
+	std::string sImg("img-");
+
+	if (key.find(sImg) == 0)
+	{
+		mImage.parse(key.substr(sImg.size()), value);
+	}
+}
+
+bool ElementImage::collide(double x, double y)
 {
     if (x > mPosition.x && x < mPosition.x + mImage.getWidth()
             && y > mPosition.y && y < mPosition.y + mImage.getHeight())
@@ -34,23 +48,8 @@ bool ElementImage::collide(float x, float y)
 
 void ElementImage::draw(SDL_Surface* displaySurface)
 {
-    mImage.setPosition(mPosition.x + mImage.getWidth() * mOriginH,
-            mPosition.y + mImage.getHeight() * mOriginV);
+    mImage.setPosition(mPosition.x, mPosition.y);
     mImage.setRotation(mRotation);
     mImage.setScale(mScale.x, mScale.y);
     mImage.draw(displaySurface);
-}
-
-void ElementImage::setOrigin(float h, float v)
-{
-    mOriginH = h;
-    mOriginV = v;
-    if (mOriginH > 1)
-        mOriginH = 1;
-    else if (mOriginH < 0)
-        mOriginH = 0;
-    if (mOriginV > 1)
-        mOriginV = 0;
-    else if (mOriginV < 0)
-        mOriginV = 0;
 }

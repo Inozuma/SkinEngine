@@ -15,6 +15,12 @@
 #include <typeinfo>
 #include <iostream>
 
+#if defined(SKINENGINE_EXPORT)
+# define SKINENGINE_API __declspec(dllexport)
+#else
+# define SKINENGINE_API __declspec(dllimport)
+#endif
+
 typedef std::map<std::string, DynamicType> DynamicTypeMap;
 typedef std::pair<std::string, DynamicType> DynamicTypePair;
 
@@ -69,7 +75,7 @@ public:
             DynamicCast<T > (this->mData[name]);
             this->mData[name] = data;
         }
-        catch (std::exception &e)
+        catch (...)
         {
             std::cout << "Error on update: Data `" << name << "` exists with a different type." << std::endl;
             return false;
@@ -90,7 +96,7 @@ public:
             T value = DynamicCast<T > (this->mData[name]);
             return value;
         }
-        catch (std::exception &e)
+        catch (...)
         {
             std::cout << "Error on get: Data `" << name << "` exists with a different type" << std::endl;
             return T();

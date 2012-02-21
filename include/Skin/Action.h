@@ -24,10 +24,6 @@ namespace Skin
         virtual ~Action();
 
         virtual void execute() = 0;
-        
-    private:
-        //std::string parseParameter(T&, const std::string&);
-        //std::string parseDynamicData(T&, const std::string&);
     };
 }
 

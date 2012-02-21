@@ -11,8 +11,8 @@
 
 using namespace Skin;
 
-Effect::Effect(float start, float end,
-        const Vectorf & translation, float rotation,
+Effect::Effect(double start, double end,
+        const Vectorf & translation, double rotation,
         const Vectorf & scale, const Color & color) :
 mActive(true),
 mTime(0),
@@ -50,12 +50,12 @@ const Vectorf& Effect::getScale() const
     return mScale;
 }
 
-void Effect::setRotation(float mRotation)
+void Effect::setRotation(double mRotation)
 {
     this->mRotation = mRotation;
 }
 
-float Effect::getRotation() const
+double Effect::getRotation() const
 {
     return mRotation;
 }
@@ -70,22 +70,22 @@ const Vectorf& Effect::getTranslation() const
     return mTranslation;
 }
 
-void Effect::setEnd(float mEnd)
+void Effect::setEnd(double mEnd)
 {
     this->mEnd = mEnd;
 }
 
-float Effect::getEnd() const
+double Effect::getEnd() const
 {
     return mEnd;
 }
 
-void Effect::setStart(float mStart)
+void Effect::setStart(double mStart)
 {
     this->mStart = mStart;
 }
 
-float Effect::getStart() const
+double Effect::getStart() const
 {
     return mStart;
 }
@@ -96,31 +96,31 @@ bool Effect::isActive() const
 }
 
 template<>
-void Effect::update<Element>(Element& element, float time)
+void Effect::update<Element>(Element& element, double time)
 {
     if (this->mActive)
     {
         this->mTime += time;
         if (this->mTime >= this->mStart && this->mTime < this->mEnd)
         {
-            float pos = (this->mTime - this->mStart) / this->mLength;
+            double pos = (this->mTime - this->mStart) / this->mLength;
             element.setTranslation(element.getTranslation() + this->mTranslation * pos);
             element.setRotation(element.getRotation() + this->mRotation * pos);
             element.setScale(element.getScale() + this->mScale * pos);
-            element.setEffectColor(element.getEffectColor() + this->mColor * pos);
+			element.setColorize(element.getColorize() + this->mColor * pos);
         }
         else if (this->mTime >= this->mEnd)
         {
             element.setTranslation(element.getTranslation() + this->mTranslation);
             element.setRotation(element.getRotation() + this->mRotation);
             element.setScale(element.getScale() + this->mScale);
-            element.setEffectColor(element.getEffectColor() + this->mColor);
+			element.setColorize(element.getColorize() + this->mColor);
             this->mActive = false;
         }
     }
 }
 
 template<>
-void Effect::update<Screen>(Screen&, float)
+void Effect::update<Screen>(Screen&, double)
 {
 }

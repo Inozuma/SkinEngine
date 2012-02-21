@@ -50,7 +50,7 @@ void Box::setPosition(const Vectorf& point)
     mPosition = point;
 }
 
-void Box::setPosition(float x, float y)
+void Box::setPosition(double x, double y)
 {
     mPosition.x = x;
     mPosition.y = y;
@@ -61,7 +61,7 @@ void Box::setSize(const Vectorf& point)
     mSize = point;
 }
 
-void Box::setSize(float x, float y)
+void Box::setSize(double x, double y)
 {
     mSize.x = x;
     mSize.y = y;
@@ -84,6 +84,16 @@ void Box::setOutlineColor(const Color& color)
 
 void Box::draw(SDL_Surface* drawSurface)
 {
-    roundedBoxRGBA(drawSurface, mPosition.x, mPosition.y, mPosition.x + mSize.x, mPosition.y + mSize.y, mRadius, mBoxColor.r, mBoxColor.g, mBoxColor.b, mBoxColor.a * 255);
-    roundedRectangleRGBA(drawSurface, mPosition.x, mPosition.y, mPosition.x + mSize.x, mPosition.y + mSize.y, mRadius, mOutlineColor.r, mOutlineColor.g, mOutlineColor.b, mOutlineColor.a * 255);
+    roundedBoxRGBA(drawSurface, mPosition.x, mPosition.y, mPosition.x + mSize.x, mPosition.y + mSize.y, mRadius, mBoxColor.r, mBoxColor.g, mBoxColor.b, static_cast<char>(mBoxColor.a * 255));
+    roundedRectangleRGBA(drawSurface, mPosition.x, mPosition.y, mPosition.x + mSize.x, mPosition.y + mSize.y, mRadius, mOutlineColor.r, mOutlineColor.g, mOutlineColor.b, static_cast<char>(mOutlineColor.a * 255));
+}
+
+void Box::parse(const std::string& key, const std::string& value)
+{
+	if (key == "radius")
+		setRadius(atoi(value.c_str()));
+	else if (key == "inlinecolor")
+		setBoxColor(value);
+	else if (key == "outlinecolor")
+		setOutlineColor(value);
 }

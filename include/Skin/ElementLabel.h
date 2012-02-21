@@ -11,8 +11,6 @@
 #include "Skin/Element.h"
 #include "Skin/Text.h"
 
-#include <string>
-
 namespace Skin
 {
 
@@ -33,19 +31,11 @@ namespace Skin
         ElementLabel(Screen&, const Vectorf & = Vectorf(), const std::string & = "");
         virtual ~ElementLabel();
         
-        virtual bool collide(float, float);
+		virtual void parse(const std::string&, const std::string&);
+        virtual bool collide(double, double);
         virtual void draw(SDL_Surface* displaySurface);
         
-        void setLabel(const std::string &);
-        void setFontname(const std::string &);
-        void setFontsize(unsigned int);
-        void setFontcolor(const Color&);
-        
-        const std::string& getLabel() const;
-        unsigned int getSize() const;
-        const std::string & getFontname() const;
-        unsigned int getFontsize() const;
-        const Color& getFontcolor() const;
+        Text& label();
     };
 };
 

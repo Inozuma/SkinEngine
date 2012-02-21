@@ -12,11 +12,8 @@
 #include "Skin/Image.h"
 #include "Skin/Text.h"
 
-#include <SDL/SDL_ttf.h>
-
 namespace Skin
 {
-
     class ElementButton : public Element
     {
     private:
@@ -34,19 +31,22 @@ namespace Skin
         State mCurrentState;
 
     public:
-        ElementButton(Screen&, const Vectorf&, const std::string&);
+        ElementButton(Screen&, const Vectorf&, const std::string& = "");
         virtual ~ElementButton();
 
-        virtual bool collide(float x, float y);
+		virtual void parse(const std::string&, const std::string&);
+        virtual bool collide(double x, double y);
         virtual void draw(SDL_Surface* displaySurface);
         
+		Text& label();
+		Image& imageOnIdle();
+		Image& imageOnFocus();
+		Image& imageOnSelect();
+
         virtual void onIdle();
         virtual void onFocus();
         virtual void onSelect();
         
-        void setFontname(const std::string& fontname);
-        void setFontsize(unsigned int fontsize);
-        void setFontcolor(const Color& fontcolor);
         void setImageOnIdle(const std::string& image);
         void setImageOnFocus(const std::string& image);
         void setImageOnSelect(const std::string& image);

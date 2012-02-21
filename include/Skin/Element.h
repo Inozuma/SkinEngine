@@ -9,12 +9,14 @@
 #define	ELEMENT_H
 
 #include "Skin/Vector.h"
-#include "Skin/Box.h"
 #include "Skin/Action.h"
 #include "Skin/Effect.h"
 #include "Skin/Color.h"
+#include "Parser/Node.h"
 
-#include <SDL/SDL.h>
+// need proper abstraction
+struct SDL_Surface;
+union SDL_Event;
 
 typedef std::list<Skin::Action*> ActionList;
 typedef std::list<Skin::Effect*> EffectList;
@@ -40,7 +42,7 @@ namespace Skin
         
         Color mEffectColor;
         Vectorf mTranslation;
-        float mRotation;
+        double mRotation;
         Vectorf mScale;
 
         ActionMap mActions;
@@ -55,7 +57,7 @@ namespace Skin
         
         virtual std::string getData(const std::string&);
 
-        bool getDynamic() const;
+        bool isDynamic() const;
 
         void addEffect(const std::string &, Effect*);
         void addAction(const std::string &, Action*);
@@ -66,22 +68,23 @@ namespace Skin
         void setColor(const Color &);
         const Color & getColor() const;
         
-        void setEffectColor(const Color &);
-        const Color & getEffectColor() const;
+        void setColorize(const Color &);
+        const Color & getColorize() const;
 
         void setTranslation(const Vectorf &);
         const Vectorf & getTranslation() const;
 
-        void setRotation(float);
-        float getRotation() const;
+        void setRotation(double);
+        double getRotation() const;
 
         void setScale(const Vectorf & pScale);
         const Vectorf & getScale() const;
 
+		virtual void parse(const std::string&, const std::string&);
         virtual void event(const SDL_Event &);
-        virtual void update(float);
+        virtual void update(double);
         virtual void draw(SDL_Surface*) = 0;
-        virtual bool collide(float, float) = 0;
+        virtual bool collide(double, double) = 0;
 
         // Input callback
         virtual void onUp();

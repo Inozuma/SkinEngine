@@ -14,8 +14,6 @@
 #include <map>
 #include <string>
 
-#include <SDL/SDL.h>
-
 typedef std::map<int, Skin::Element*> ElementMap;
 typedef std::pair<int, Skin::Element*> ElementPair;
 
@@ -52,7 +50,7 @@ namespace Skin
         void setBackground(const std::string&);
 
         void event(const SDL_Event&);
-        void update(float);
+        void update(double);
         void draw(SDL_Surface* displaySurface);
         
         // Interface Callback

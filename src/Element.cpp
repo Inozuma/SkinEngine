@@ -5,9 +5,12 @@
  * Created on December 11, 2011, 3:35 AM
  */
 
-#include <SFML/Window/Event.hpp>
-
 #include "Skin/Element.h"
+
+#include <SDL/SDL.h>
+
+#include <vector>
+#include <boost/algorithm/string.hpp>
 
 using namespace Skin;
 
@@ -37,7 +40,7 @@ std::string Element::getData(const std::string& name)
     return "";
 }
 
-bool Element::getDynamic() const
+bool Element::isDynamic() const
 {
     return mDynamic;
 }
@@ -72,12 +75,12 @@ const Color& Element::getColor() const
     return this->mColor;
 }
 
-const Color& Element::getEffectColor() const
+const Color& Element::getColorize() const
 {
     return mEffectColor;
 }
 
-void Element::setEffectColor(const Color& color)
+void Element::setColorize(const Color& color)
 {
     mEffectColor = color;
 }
@@ -92,12 +95,12 @@ const Vectorf & Element::getTranslation() const
     return mTranslation;
 }
 
-void Element::setRotation(float rotation)
+void Element::setRotation(double rotation)
 {
     this->mRotation = rotation;
 }
 
-float Element::getRotation() const
+double Element::getRotation() const
 {
     return mRotation;
 }
@@ -110,6 +113,20 @@ void Element::setScale(const Vectorf & scale)
 const Vectorf & Element::getScale() const
 {
     return mScale;
+}
+
+void Element::parse(const std::string& key, const std::string& value)
+{
+	if (key == "position")
+	{
+		std::vector<std::string> values;
+		boost::split(values, value, boost::is_any_of("\t "));
+
+		if (values.size() == 1)
+			mPosition.x = atof(values[0].c_str());
+		if (values.size() == 2)
+			mPosition.y = atof(values[1].c_str());
+	}
 }
 
 void Element::event(const SDL_Event& event)
@@ -145,7 +162,7 @@ void Element::event(const SDL_Event& event)
     }
 }
 
-void Element::update(float time)
+void Element::update(double time)
 {
     if (!this->mActiveEffects.empty())
     {

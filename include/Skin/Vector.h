@@ -30,18 +30,18 @@ namespace Skin
     
     struct Vectorf
     {
-        float x;
-        float y;
+        double x;
+        double y;
 
-        Vectorf(float x = 0, float y = 0);
+        Vectorf(double x = 0, double y = 0);
         
         Vectorf operator +(const Vectorf &) const;
         Vectorf operator -(const Vectorf &) const;
         Vectorf operator *(const Vectorf &) const;
         Vectorf operator /(const Vectorf &) const;
         
-        Vectorf operator *(float) const;
-        Vectorf operator /(float) const;
+        Vectorf operator *(double) const;
+        Vectorf operator /(double) const;
     };
 }
 

@@ -8,6 +8,8 @@
 #include "Skin/Screen.h"
 #include "Skin/Engine.h"
 
+#include <SDL/SDL.h>
+
 using namespace Skin;
 
 Screen::Screen(Engine & skinCore) :
@@ -62,13 +64,12 @@ void Screen::setActiveElement(int id)
 
 void Screen::setBackground(const std::string& file)
 {
-    if (mBackground.openFile(file))
-    {
-        SDL_Surface* video = SDL_GetVideoSurface();
-        mBackground.setScale(video->w / mBackground.getWidth(),
-                video->h / mBackground.getHeight());
-    }
-    
+	if (mBackground.openFile(file))
+	{
+		SDL_Surface* video = SDL_GetVideoSurface();
+		mBackground.setScale(double(video->w / mBackground.getWidth()),
+				double(video->h / mBackground.getHeight()));
+	}
 }
 
 void Screen::event(const SDL_Event& event)
@@ -87,7 +88,7 @@ void Screen::event(const SDL_Event& event)
         for (ElementMap::iterator it = mElements.begin();
                 it != mElements.end(); ++it)
         {
-            if (it->second->getDynamic()
+            if (it->second->isDynamic()
                     && it->second->collide(event.motion.x, event.motion.y))
             {
                 this->setActiveElement(it->first);
@@ -108,7 +109,7 @@ void Screen::event(const SDL_Event& event)
     }
 }
 
-void Screen::update(float time)
+void Screen::update(double time)
 {
     for (ElementMap::iterator it = this->mElements.begin();
             it != this->mElements.end(); ++it)

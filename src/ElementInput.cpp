@@ -7,9 +7,11 @@
 
 #include "Skin/ElementInput.h"
 
+#include <SDL/SDL.h>
+
 using namespace Skin;
 
-ElementInput::ElementInput(Screen& screen, const Vectorf & position, float size) :
+ElementInput::ElementInput(Screen& screen, const Vectorf & position, double size) :
 Element(screen, position),
 mLabel(""),
 mSize(size),
@@ -25,6 +27,16 @@ ElementInput::~ElementInput()
 {
 }
 
+Text& ElementInput::label()
+{
+	return mLabel;
+}
+
+Box& ElementInput::box()
+{
+	return mBox;
+}
+
 std::string ElementInput::getData(const std::string& name)
 {
     if (name == "value")
@@ -32,7 +44,30 @@ std::string ElementInput::getData(const std::string& name)
     return "";
 }
 
-bool ElementInput::collide(float x, float y)
+void ElementInput::parse(const std::string& key, const std::string& value)
+{
+	std::string sFont("font-");
+	std::string sBox("box-");
+	std::string sSize("size-");
+
+	if (key.find(sFont) == 0)
+	{
+		mLabel.parse(key.substr(sFont.size()), value);
+	}
+	else if (key.find(sBox) == 0)
+	{
+		mBox.parse(key.substr(sBox.size()), value);
+	}
+	else if (key.find(sSize) == 0)
+	{
+		std::string subkey(key.substr(sSize.size()));
+
+		if (subkey == "length")
+			mSize = atof(value.c_str());
+	}
+}
+
+bool ElementInput::collide(double x, double y)
 {
 
     if (x > mPosition.x && x < mPosition.x + mSize &&
@@ -63,7 +98,7 @@ void ElementInput::event(const SDL_Event& event)
             && event.key.keysym.unicode != '\b')
     {
         if (event.key.keysym.sym != SDLK_BACKSPACE)
-            mText.push_back(event.key.keysym.unicode);
+            mText.push_back(static_cast<char>(event.key.keysym.unicode));
     }
     else if (event.type == SDL_KEYDOWN)
     {
@@ -87,70 +122,4 @@ void ElementInput::onIdle()
 {
     mSelect = false;
     Element::onIdle();
-}
-
-void ElementInput::setFontname(const std::string& fontname)
-{
-    mLabel.setName(fontname);
-}
-
-void ElementInput::setFontsize(unsigned int fontsize)
-{
-    mLabel.setSize(fontsize);
-}
-
-void ElementInput::setFontcolor(const Color& color)
-{
-    mLabel.setColor(color);
-}
-
-void ElementInput::setBoxColor(const Color& color)
-{
-    mBox.setBoxColor(color);
-}
-
-void ElementInput::setOutlineColor(const Color& color)
-{
-    mBox.setOutlineColor(color);
-}
-
-void ElementInput::setRadius(int radius)
-{
-    mBox.setRadius(radius);
-}
-
-void ElementInput::setSize(float size)
-{
-    mSize = size;
-    mBox.setSize(mPosition.x + size, mPosition.y + mLabel.getMaxHeight());
-}
-
-void ElementInput::setText(const std::string& text)
-{
-    mText = text;
-}
-
-const std::string& ElementInput::getFontname() const
-{
-    return mLabel.getName();
-}
-
-unsigned int ElementInput::getFonsize() const
-{
-    return mLabel.getSize();
-}
-
-const Color& ElementInput::getFontcolor() const
-{
-    return mLabel.getColor();
-}
-
-float ElementInput::getSize() const
-{
-    return mSize;
-}
-
-const std::string& ElementInput::getText() const
-{
-    return mText;
 }

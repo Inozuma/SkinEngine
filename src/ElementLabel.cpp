@@ -21,7 +21,17 @@ ElementLabel::~ElementLabel()
 {
 }
 
-bool ElementLabel::collide(float x, float y)
+void ElementLabel::parse(const std::string& key, const std::string& value)
+{
+	std::string sFont("font-");
+
+	if (key.find(sFont) == 0)
+	{
+		mLabel.parse(key.substr(sFont.size()), value);
+	}
+}
+
+bool ElementLabel::collide(double x, double y)
 {
     (void) x;
     (void) y;
@@ -35,42 +45,7 @@ void ElementLabel::draw(SDL_Surface* displaySurface)
     mLabel.draw(displaySurface);
 }
 
-void ElementLabel::setLabel(const std::string& label)
+Text& ElementLabel::label()
 {
-    mLabel.setText(label);
-}
-
-void ElementLabel::setFontname(const std::string& fontname)
-{
-    mLabel.setName(fontname);
-}
-
-void ElementLabel::setFontsize(unsigned int fontsize)
-{
-    mLabel.setSize(fontsize);
-}
-
-void ElementLabel::setFontcolor(const Color& fontcolor)
-{
-    mLabel.setColor(fontcolor);
-}
-
-const std::string& ElementLabel::getLabel() const
-{
-    return mLabel.getText();
-}
-
-unsigned int ElementLabel::getFontsize() const
-{
-    return mLabel.getSize();
-}
-
-const std::string & ElementLabel::getFontname() const
-{
-    return mLabel.getName();
-}
-
-const Color & ElementLabel::getFontcolor() const
-{
-    return mLabel.getColor();
+	return mLabel;
 }

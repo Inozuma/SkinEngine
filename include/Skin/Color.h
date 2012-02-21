@@ -9,6 +9,7 @@
 #define	COLOR_H
 
 #include <stdint.h>
+#include <string>
 
 namespace Skin
 {
@@ -19,19 +20,20 @@ namespace Skin
         uint8_t r;
         uint8_t g;
         uint8_t b;
-        float a;
+        double a;
         
         Color();
-        Color(uint8_t r, uint8_t g, uint8_t b, float a = 1);
+        Color(uint8_t r, uint8_t g, uint8_t b, double a = 1);
+		Color(const std::string&);
         
         Color operator +(const Color&) const;
         Color operator -(const Color&) const;
         
-        Color operator *(float) const;
-        Color operator /(float) const;
+        Color operator *(double) const;
+        Color operator /(double) const;
         
     private:
-        Color set(int r, int g, int b, float a) const;
+        Color set(int r, int g, int b, double a) const;
         
     };
 }

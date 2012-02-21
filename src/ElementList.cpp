@@ -27,7 +27,7 @@ mMax(0)
     mBox.setSize(mBoxsize.x, mBoxsize.y);
     mBox.setBoxColor(Color(255, 255, 255, 0.2));
     mBox.setOutlineColor(Color(255, 255, 255, 1));
-    mMax = mBoxsize.y / mFont.getMaxHeight();
+    mMax = static_cast<int>(mBoxsize.y / mFont.getMaxHeight());
 }
 
 ElementList::~ElementList()
@@ -45,7 +45,49 @@ std::string ElementList::getData(const std::string& name)
     return "";
 }
 
-bool ElementList::collide(float x, float y)
+Text& ElementList::label()
+{
+	return mFont;
+}
+
+Box& ElementList::box()
+{
+	return mBox;
+}
+
+void ElementList::parse(const std::string& key, const std::string& value)
+{
+	if (key == "value")
+	{
+		mValue = value;
+	}
+	else
+	{
+		std::string sSize("size-");
+		std::string sFont("font-");
+		std::string sBox("box-");
+
+		if (key.find(sSize) == 0)
+		{
+			std::string subkey(key.substr(sSize.size()));
+
+			if (subkey == "width")
+				mBoxsize.x = atof(value.c_str());
+			else if (subkey == "height")
+				mBoxsize.y = atof(value.c_str());
+		}
+		else if (key.find(sFont) == 0)
+		{
+			mFont.parse(key.substr(sFont.size()), value);
+		}
+		else if (key.find(sBox) == 0)
+		{
+			mBox.parse(key.substr(sBox.size()), value);
+		}
+	}
+}
+
+bool ElementList::collide(double x, double y)
 {
     if (x > mPosition.x && x < mPosition.x + mBoxsize.x
             && y > mPosition.y && y < mPosition.y + mBoxsize.y)
@@ -79,7 +121,7 @@ void ElementList::draw(SDL_Surface* displaySurface)
     }
 }
 
-void ElementList::update(float time)
+void ElementList::update(double time)
 {
     parseDynamicData();
     Element::update(time);
@@ -118,17 +160,6 @@ void ElementList::onDown()
             Element::onDown();
         }
     }
-}
-
-void ElementList::setFontname(const std::string& fontname)
-{
-    mFont.setName(fontname);
-    mMax = mBoxsize.y / mFont.getMaxHeight();
-}
-
-void ElementList::setFontsize(unsigned int size)
-{
-    mFont.setSize(size);
 }
 
 void ElementList::parseDynamicData()

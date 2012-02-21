@@ -21,7 +21,29 @@ ElementButton::~ElementButton()
 {
 }
 
-bool ElementButton::collide(float x, float y)
+void ElementButton::parse(const std::string& key, const std::string& value)
+{
+	std::string sImg("img-");
+	std::string sFont("font-");
+	if (key.find(sImg) == 0)
+	{
+		std::string subkey = key.substr(sImg.size());
+		std::string sOnIdle("onidle-");
+		std::string sOnFocus("onfocus-");
+		std::string sOnSelect("onselect-");
+
+		if (subkey.find(sOnIdle) == 0)
+			mImage[ONIDLE].parse(subkey.substr(sOnIdle.size()), value);
+		else if (subkey.find(sOnFocus) == 0)
+			mImage[ONFOCUS].parse(subkey.substr(sOnFocus.size()), value);
+		else if (subkey.find(sOnSelect) == 0)
+			mImage[ONSELECT].parse(subkey.substr(sOnSelect.size()), value);
+	}
+	else if (key.find(sFont) == 0)
+		mLabel.parse(key.substr(sFont.size()), value);
+}
+
+bool ElementButton::collide(double x, double y)
 {
     if (x > mPosition.x && x < mPosition.x + mLabel.getWidth()
             && y > mPosition.y && y < mPosition.y + mLabel.getHeight())
@@ -41,6 +63,26 @@ void ElementButton::draw(SDL_Surface* displaySurface)
     mLabel.draw(displaySurface);
 }
 
+Text& ElementButton::label()
+{
+	return mLabel;
+}
+
+Image& ElementButton::imageOnIdle()
+{
+	return mImage[ONIDLE];
+}
+
+Image& ElementButton::imageOnFocus()
+{
+	return mImage[ONFOCUS];
+}
+
+Image& ElementButton::imageOnSelect()
+{
+	return mImage[ONSELECT];
+}
+
 void ElementButton::onIdle()
 {
     mCurrentState = ONIDLE;
@@ -57,21 +99,6 @@ void ElementButton::onSelect()
 {
     mCurrentState = ONSELECT;
     Element::onSelect();
-}
-
-void ElementButton::setFontname(const std::string& fontname)
-{
-    mLabel.setName(fontname);
-}
-
-void ElementButton::setFontsize(unsigned int fontsize)
-{
-    mLabel.setSize(fontsize);
-}
-
-void ElementButton::setFontcolor(const Color& fontcolor)
-{
-    mLabel.setColor(fontcolor);
 }
 
 void ElementButton::setImageOnIdle(const std::string& image)

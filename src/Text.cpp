@@ -7,6 +7,9 @@
 
 #include "Skin/Text.h"
 
+#include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+
 #include <iostream>
 
 using namespace Skin;
@@ -33,7 +36,7 @@ const Vectorf& Text::getPosition() const
     return mPosition;
 }
 
-float Text::getRotation() const
+double Text::getRotation() const
 {
     return mRotation;
 }
@@ -83,13 +86,13 @@ void Text::setPosition(const Vectorf& position)
     mPosition = position;
 }
 
-void Text::setPosition(float x, float y)
+void Text::setPosition(double x, double y)
 {
     mPosition.x = x;
     mPosition.y = y;
 }
 
-void Text::setRotation(float rotation)
+void Text::setRotation(double rotation)
 {
     mRotation = rotation;
 }
@@ -99,7 +102,7 @@ void Text::setScale(const Vectorf& scale)
     mScale = scale;
 }
 
-void Text::setScale(float x, float y)
+void Text::setScale(double x, double y)
 {
     mScale.x = x;
     mScale.y = y;
@@ -140,12 +143,32 @@ void Text::draw(SDL_Surface* drawSurface)
             SDL_Rect position;
             position.w = 0;
             position.h = 0;
-            position.x = mPosition.x;
-            position.y = mPosition.y;
+            position.x = short(mPosition.x);
+            position.y = short(mPosition.y);
             SDL_BlitSurface(surface, NULL, drawSurface, &position);
             SDL_FreeSurface(surface);
         }
     }
+}
+
+void Text::parse(const std::string& key, const std::string& value)
+{
+	if (key == "text")
+		setText(value);
+	else if (key == "name")
+		setName(value);
+	else if (key == "size")
+		setSize(atoi(value.c_str()));
+	else if (key == "color")
+		setColor(value);
+	else if (key == "bold")
+		TTF_SetFontStyle(mFont, TTF_STYLE_BOLD);
+	else if (key == "italic")
+		TTF_SetFontStyle(mFont, TTF_STYLE_ITALIC);
+	else if (key == "underline")
+		TTF_SetFontStyle(mFont, TTF_STYLE_UNDERLINE);
+	else if (key == "strike")
+		TTF_SetFontStyle(mFont, TTF_STYLE_STRIKETHROUGH);
 }
 
 void Text::loadFont(const std::string& fontname, unsigned int fontsize)

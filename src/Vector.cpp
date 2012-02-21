@@ -15,7 +15,7 @@ Vector::Vector(int x, int y) :
 {
 }
 
-Vectorf::Vectorf(float x, float y) :
+Vectorf::Vectorf(double x, double y) :
         x(x),
         y(y)
 {
@@ -73,12 +73,12 @@ Vector Vector::operator /(int v) const
     return v ? Vector(this->x / v, this->y / v) : *this;
 }
 
-Vectorf Vectorf::operator *(float v) const
+Vectorf Vectorf::operator *(double v) const
 {
     return Vectorf(this->x * v, this->y * v);
 }
 
-Vectorf Vectorf::operator /(float v) const
+Vectorf Vectorf::operator /(double v) const
 {
     return v ? Vectorf(this->x / v, this->y / v) : *this;
 }

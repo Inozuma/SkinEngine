@@ -21,19 +21,19 @@ namespace Skin
     private:
         bool mActive;
         
-        float mTime;
-        float mStart;
-        float mEnd;
-        float mLength;
+        double mTime;
+        double mStart;
+        double mEnd;
+        double mLength;
         
         Vectorf mTranslation;
-        float mRotation;
+        double mRotation;
         Vectorf mScale;
         Color mColor;
         
     public:
-        Effect(float = 0, float = 0,
-                const Vectorf & = Vectorf(), float = 0,
+        Effect(double = 0, double = 0,
+                const Vectorf & = Vectorf(), double = 0,
                 const Vectorf & = Vectorf(), const Color & = Color());
         virtual ~Effect();
         
@@ -43,26 +43,26 @@ namespace Skin
         void setScale(const Vectorf&);
         const Vectorf& getScale() const;
         
-        void setRotation(float);
-        float getRotation() const;
+        void setRotation(double);
+        double getRotation() const;
         
         void setTranslation(const Vectorf&);
         const Vectorf& getTranslation() const;
         
-        void setEnd(float mEnd);
-        float getEnd() const;
+        void setEnd(double mEnd);
+        double getEnd() const;
         
-        void setStart(float mStart);
-        float getStart() const;
+        void setStart(double mStart);
+        double getStart() const;
         
         bool isActive() const;
         
         template <class T>
-        void update(T&, float);
+        void update(T&, double);
     };
     
-    template <> void Effect::update<Element>(Element&, float);
-    template <> void Effect::update<Screen>(Screen&, float);
+    template <> void Effect::update<Element>(Element&, double);
+    template <> void Effect::update<Screen>(Screen&, double);
 }
 
 #endif	/* EFFECT_H */
