@@ -24,7 +24,9 @@ mRotation(0),
 mScale(1, 1),
 mSmooth(0),
 mWidth(0),
-mHeight(0)
+mHeight(0),
+mOriginH(0),
+mOriginV(0)
 {
 }
 
@@ -34,7 +36,9 @@ mRotation(0),
 mScale(1, 1),
 mSmooth(0),
 mWidth(0),
-mHeight(0)
+mHeight(0),
+mOriginH(0),
+mOriginV(0)
 {
     openFile(filename);
 }

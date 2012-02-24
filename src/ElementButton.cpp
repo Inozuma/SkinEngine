@@ -45,8 +45,8 @@ void ElementButton::parse(const std::string& key, const std::string& value)
 
 bool ElementButton::collide(double x, double y)
 {
-    if (x > mPosition.x && x < mPosition.x + mLabel.getWidth()
-            && y > mPosition.y && y < mPosition.y + mLabel.getHeight())
+    if (x > mPosition.x && x < mPosition.x + mImage[mCurrentState].getWidth()
+            && y > mPosition.y && y < mPosition.y + mImage[mCurrentState].getHeight())
         return true;
     return false;
 }

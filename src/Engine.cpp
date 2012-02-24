@@ -31,7 +31,7 @@ using namespace Skin;
 Engine::Engine(std::string const & cfgFile) :
 mParserConfiguration(NULL),
 mConfigurationFile(cfgFile),
-mSkinPath(""),
+mSkinDir(""),
 mFullscreen(false),
 mWidth(0),
 mHeight(0),
@@ -49,7 +49,7 @@ mMutex(NULL)
     {
         std::cout << "Loading default configuration" << std::endl;
 
-        this->mSkinPath = DEFAULT_SKIN_PATH;
+        this->mSkinDir = DEFAULT_SKIN_DIR;
 		this->mSkinName = DEFAULT_SKIN_NAME;
 		this->mLanguage = DEFAULT_LANGUAGE;
         this->mFullscreen = DEFAULT_VIDEO_MODE;
@@ -142,7 +142,8 @@ bool Engine::init()
     SDL_EnableUNICODE(SDL_ENABLE);
     SDL_EnableKeyRepeat(400, 20);
 
-	Directory skinDir(mSkinPath);
+	mSkinPath = mSkinDir + "/" +  mSkinName + "/";
+	Directory skinDir(mSkinDir);
 	if (skinDir.hasDirectory(mSkinName))
 	{
 		if (skinDir.getDirectory(mSkinName)->hasFile("skin.xml"))
@@ -261,7 +262,7 @@ void Engine::setupParserConfiguration()
 
 void Engine::parseSkinPath(XMLNode* node)
 {
-	mSkinPath = node->value();
+	mSkinDir = node->value();
 }
 
 void Engine::parseSkinName(XMLNode* node)
@@ -339,7 +340,7 @@ void Engine::setupParserSkin()
 	skinElementFont->addAttribute("italic", false);
 	skinElementFont->addAttribute("underline", false);
 	Node* skinElementImg = skinElement->createChild("img");
-	skinElementImg->addAttribute("src");
+	skinElementImg->addAttribute("file");
 	skinElementImg->addAttribute("event", false);
 	Node* skinElementSize = skinElement->createChild("size");
 	skinElementSize->addAttribute("x", false);
@@ -353,9 +354,9 @@ void Engine::setupParserSkin()
 	Node* skinAction = skinElement->createChild("action");
 	skinAction->addAttribute("event");
 	Node* skinEffect = skinAction->createSibling("effect");
-	skinAction->addAttribute("event");
-	skinAction->addAttribute("start");
-	skinAction->addAttribute("end");
+	skinEffect->addAttribute("event");
+	skinEffect->addAttribute("start");
+	skinEffect->addAttribute("end");
 	Node* skinEffectTranslate = skinEffect->createChild("translate");
 	skinEffectTranslate->addAttribute("x", true);
 	skinEffectTranslate->addAttribute("y", true);
@@ -396,11 +397,12 @@ void Engine::parseSkinDescription(XMLNode* node)
 
 void Engine::parseSkinInclude(XMLNode* node)
 {
-	File file(node->value());
+	std::string path = mSkinPath + node->value();
+	File file(path);
 
 	if (file.exists())
 	{
-		mParserSkin->parse(node->value());
+		mParserSkin->parse(path);
 	}
 	else
 	{
@@ -432,7 +434,7 @@ void Engine::parseSkinScreen(XMLNode* node)
 		if (!mScreens.count(attrName->value()))
 		{
 			mScreens[name] = new Screen(*this);
-			mScreens[name]->setBackground(background);
+			mScreens[name]->setBackground(mSkinPath + background);
 
 			if (mActiveScreen.empty())
 				mActiveScreen = name;
@@ -450,9 +452,9 @@ void Engine::parseSkinElement(XMLNode* node)
 	if (attrX && attrY && attrID && attrType)
 	{
 		XMLNode* nodeScreen = node->parent();
-		if (mScreens.count(nodeScreen->value()))
+		if (mScreens.count(nodeScreen->first_attribute("name")->value()))
 		{
-			Screen* screen = mScreens[nodeScreen->value()];
+			Screen* screen = mScreens[nodeScreen->first_attribute("name")->value()];
 			int x = atoi(attrX->value());
 			int y = atoi(attrY->value());
 			int id = atoi(attrID->value());
@@ -562,9 +564,9 @@ void Engine::parseSkinElementImg(XMLNode* node)
 			if (element)
 			{
 				if (attrEvent)
-					element->parse("img-" + std::string(attrEvent->value()) + "-file", attrName->value());
+					element->parse("img-" + std::string(attrEvent->value()) + "-file", mSkinPath + attrName->value());
 				else
-					element->parse("img-file", attrName->value());
+					element->parse("img-file", mSkinPath + attrName->value());
 				if (attrScaleX || attrScaleY)
 				{
 					std::string x(attrScaleX ? attrScaleX->value() : "1");

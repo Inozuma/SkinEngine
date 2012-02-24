@@ -89,6 +89,8 @@ const std::list<Node*>& Node::getSiblings() const
 
 bool Node::hasSibling(const std::string& name) const
 {
+	if (name == mName)
+		return true;
 	for (std::list<Node*>::const_iterator it = mSiblings.begin(); it != mSiblings.end(); ++it)
 	{
 		if ((*it)->mName == name)
@@ -97,8 +99,10 @@ bool Node::hasSibling(const std::string& name) const
 	return false;
 }
 
-Node* Node::getSibling(const std::string& name) const
+Node* Node::getSibling(const std::string& name)
 {
+	if (name == mName)
+		return this;
 	for (std::list<Node*>::const_iterator it = mSiblings.begin(); it != mSiblings.end(); ++it)
 	{
 		if ((*it)->mName == name)
