@@ -12,6 +12,7 @@
 #include "Skin/ElementInput.h"
 #include "Skin/ElementList.h"
 #include "Skin/ElementButton.h"
+#include "Skin/ElementVideo.h"
 #include "Skin/ActionFocus.h"
 #include "Skin/ActionCallback.h"
 #include "Skin/Exception.h"
@@ -489,6 +490,7 @@ void Engine::parseSkinElement(XMLNode* node)
 			else if (type == "video")
 			{
 				// NEED <size>
+				element = new ElementVideo(*screen, Vectorf(x, y));
 			}
 
 			screen->addElement(id, element);

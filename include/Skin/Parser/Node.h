@@ -44,7 +44,7 @@ namespace Skin
 
 		const std::list<Node*>& getSiblings() const;
 		bool hasSibling(const std::string&) const;
-		Node* getSibling(const std::string&) const;
+		Node* getSibling(const std::string&);
 		Node* createSibling(const std::string&);
 		void addSibling(Node *);
 

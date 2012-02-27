@@ -4,6 +4,15 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="Filesystem" displayName="Filesystem" projectFiles="true">
+        <itemPath>include/Skin/Filesystem/Directory.h</itemPath>
+        <itemPath>include/Skin/Filesystem/File.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Parser" displayName="Parser" projectFiles="true">
+        <itemPath>include/Skin/Parser/Node.h</itemPath>
+        <itemPath>include/Skin/Parser/Parser.h</itemPath>
+        <itemPath>include/Skin/Parser/ParserListener.h</itemPath>
+      </logicalFolder>
       <itemPath>include/Skin/Action.h</itemPath>
       <itemPath>include/Skin/ActionCallback.h</itemPath>
       <itemPath>include/Skin/ActionFocus.h</itemPath>
@@ -18,7 +27,9 @@
       <itemPath>include/Skin/ElementInput.h</itemPath>
       <itemPath>include/Skin/ElementLabel.h</itemPath>
       <itemPath>include/Skin/ElementList.h</itemPath>
+      <itemPath>include/Skin/ElementVideo.h</itemPath>
       <itemPath>include/Skin/Engine.h</itemPath>
+      <itemPath>include/Skin/Exception.h</itemPath>
       <itemPath>include/Skin/Image.h</itemPath>
       <itemPath>include/Skin/Module.h</itemPath>
       <itemPath>include/Skin/Screen.h</itemPath>
@@ -32,6 +43,15 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="Filesystem" displayName="Filesystem" projectFiles="true">
+        <itemPath>src/Filesystem/Directory.cpp</itemPath>
+        <itemPath>src/Filesystem/File.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="Parser" displayName="Parser" projectFiles="true">
+        <itemPath>src/Parser/Node.cpp</itemPath>
+        <itemPath>src/Parser/Parser.cpp</itemPath>
+        <itemPath>src/Parser/ParserListener.cpp</itemPath>
+      </logicalFolder>
       <itemPath>src/Action.cpp</itemPath>
       <itemPath>src/ActionCallback.cpp</itemPath>
       <itemPath>src/ActionFocus.cpp</itemPath>
@@ -44,6 +64,7 @@
       <itemPath>src/ElementInput.cpp</itemPath>
       <itemPath>src/ElementLabel.cpp</itemPath>
       <itemPath>src/ElementList.cpp</itemPath>
+      <itemPath>src/ElementVideo.cpp</itemPath>
       <itemPath>src/Engine.cpp</itemPath>
       <itemPath>src/Image.cpp</itemPath>
       <itemPath>src/Screen.cpp</itemPath>
@@ -62,12 +83,17 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>include</Elem>
+    <Elem>src/Filesystem</Elem>
+    <Elem>src/Parser</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="2">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>default</compilerSet>
+        <compilerSet>MinGW|MinGW</compilerSet>
         <rebuildPropChanged>true</rebuildPropChanged>
       </toolsSet>
       <compileType>

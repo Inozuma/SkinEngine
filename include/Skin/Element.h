@@ -12,7 +12,7 @@
 #include "Skin/Action.h"
 #include "Skin/Effect.h"
 #include "Skin/Color.h"
-#include "Parser/Node.h"
+#include "Skin/Parser/Node.h"
 
 // need proper abstraction
 struct SDL_Surface;

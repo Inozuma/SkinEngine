@@ -27,7 +27,7 @@
 #define VIDEO_MODE_FULLSCREEN true
 #define VIDEO_MODE_WINDOW false
 
-#define DEFAULT_SKIN_PATH "skin/"
+#define DEFAULT_SKIN_DIR "skin/"
 #define DEFAULT_SKIN_NAME "default"
 #define DEFAULT_LANGUAGE "en_US"
 #define DEFAULT_VIDEO_MODE VIDEO_MODE_WINDOW
@@ -56,8 +56,9 @@ namespace Skin
 
         // Configuration
         std::string mConfigurationFile;
-        std::string mSkinPath;
+        std::string mSkinDir;
         std::string mSkinName;
+		std::string mSkinPath;
 		std::string mLanguage;
         bool mFullscreen;
         int mWidth;
