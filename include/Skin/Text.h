@@ -61,7 +61,7 @@ namespace Skin
         void setSize(unsigned int fontsize);
         void setColor(const Color& color);
         
-        void draw(SDL_Surface* drawSurface);
+        void draw(SDL_Surface* drawSurface, unsigned int width = 0, unsigned int height = 0);
 		void parse(const std::string&, const std::string&);
         
     private:

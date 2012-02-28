@@ -33,6 +33,8 @@ void Screen::addElement(int id, Element * element)
     if (!this->mElements.count(id))
     {
         this->mElements.insert(std::pair<int, Element*>(id, element));
+		if (mActiveElement == -1 && element->isDynamic())
+			mActiveElement = id;
     }
 }
 

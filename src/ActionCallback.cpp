@@ -9,12 +9,56 @@
 #include "Skin/Screen.h"
 #include "Skin/Engine.h"
 
+#include <vector>
+
 using namespace Skin;
 
-ActionCallback::ActionCallback(Element& element, const std::string& module) :
-Action(element),
-mModule(module)
+ActionCallback::ActionCallback(Element& element, const std::string& command) :
+Action(element)
 {
+	int posDot = command.find(".");
+	int posLBracket = command.find("(");
+	int posRBracket = posLBracket;
+	for (; command[posRBracket] && command[posRBracket] != ')'; posRBracket++)
+	{
+		if (command[posRBracket] == '"')
+		{
+			posRBracket++;
+			while (command[posRBracket] != '"')
+				posRBracket++;
+		}
+	}
+	std::string params = command.substr(posLBracket + 1, posRBracket - posLBracket - 1);
+
+	mModule = command.substr(0, posDot);
+	mParameter.function = command.substr(posDot + 1, posLBracket - posDot - 1);
+	if (params.size())
+	{
+		std::vector<int> indexList;
+		indexList.push_back(-1);
+		while (params.find(",", indexList.back() + 1) != std::string::npos)
+		{
+			std::string subparam(params.substr(params.find(",", indexList.back() + 1)));
+			indexList.push_back(params.find(",", indexList.back() + 1));
+			int c = indexList.back();
+		}
+		indexList.push_back(params.size());
+		for (int i = 0; i + 1 < indexList.size(); ++i)
+		{
+			int posL = indexList[i];
+			int posR = indexList[i + 1];
+			std::string param = params.substr(posL + 1, posR - posL - 1);
+			while (isspace(param.front()))
+				param = param.substr(1);
+			while (isspace(param.back()))
+				param.pop_back();
+			if (param.front() == '"' && param.back() == '"')
+			{
+				param = param.substr(1, param.size() - 2);
+			}
+			addParameter(param);
+		}
+	}
 }
 
 ActionCallback::~ActionCallback()

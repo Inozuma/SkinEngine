@@ -75,14 +75,18 @@ void ElementList::parse(const std::string& key, const std::string& value)
 				mBoxsize.x = atof(value.c_str());
 			else if (subkey == "height")
 				mBoxsize.y = atof(value.c_str());
+			mBox.setSize(mBoxsize.x, mBoxsize.y);
+			mMax = static_cast<int>(mBoxsize.y / mFont.getMaxHeight());
 		}
 		else if (key.find(sFont) == 0)
 		{
 			mFont.parse(key.substr(sFont.size()), value);
+			mMax = static_cast<int>(mBoxsize.y / mFont.getMaxHeight());
 		}
 		else if (key.find(sBox) == 0)
 		{
 			mBox.parse(key.substr(sBox.size()), value);
+			mMax = static_cast<int>(mBoxsize.y / mFont.getMaxHeight());
 		}
 	}
 }
@@ -98,6 +102,14 @@ bool ElementList::collide(double x, double y)
 void ElementList::draw(SDL_Surface* displaySurface)
 {
     mBox.draw(displaySurface);
+	if (mValues.size())
+	{
+		Box hl;
+		hl.setBoxColor(Color("#424242"));
+        hl.setPosition(mPosition.x, mPosition.y + mIndex * mFont.getMaxHeight());
+        hl.setSize(mBoxsize.x, mFont.getMaxHeight() + mFont.getMaxHeight() / 2);
+        hl.draw(displaySurface);
+	}
     for (int i = 0; i < (signed)mValues.size(); ++i)
     {
         Text text(mValues[i + mOffset]);
@@ -105,16 +117,9 @@ void ElementList::draw(SDL_Surface* displaySurface)
         text.setPosition(mPosition.x + mFont.getMaxHeight() / 2,
                 mPosition.y + mFont.getMaxHeight() / 4 + i * mFont.getMaxHeight());
         text.setColor(Color(255, 255, 255, 1));
-        if (i == mIndex)
-        {
-            Box hl;
-            hl.setPosition(mPosition.x, mPosition.y + mFont.getMaxHeight() / 4 + i * mFont.getMaxHeight());
-            hl.setSize(mBoxsize.x, mFont.getMaxHeight() * 1.25);
-            hl.draw(displaySurface);
-        }
         if (i < (signed)mMax)
         {
-            text.draw(displaySurface);
+            text.draw(displaySurface, mBoxsize.x - mFont.getMaxHeight() / 2, mBoxsize.y);
         }
         else
             break ;

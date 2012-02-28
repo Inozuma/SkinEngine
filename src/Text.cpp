@@ -129,7 +129,7 @@ void Text::setColor(const Color& color)
     mColor = color;
 }
 
-void Text::draw(SDL_Surface* drawSurface)
+void Text::draw(SDL_Surface* drawSurface, unsigned int width, unsigned height)
 {
     if (mFont)
     {
@@ -140,12 +140,20 @@ void Text::draw(SDL_Surface* drawSurface)
         SDL_Surface* surface = TTF_RenderText_Blended(mFont, mText.c_str(), color);
         if (surface)
         {
-            SDL_Rect position;
-            position.w = 0;
-            position.h = 0;
-            position.x = short(mPosition.x);
-            position.y = short(mPosition.y);
-            SDL_BlitSurface(surface, NULL, drawSurface, &position);
+            SDL_Rect dstrec;
+			SDL_Rect srcrec;
+            dstrec.w = 0;
+            dstrec.h = 0;
+            dstrec.x = short(mPosition.x);
+            dstrec.y = short(mPosition.y);
+			srcrec.w = width;
+			srcrec.h = height;
+			srcrec.x = 0;
+			srcrec.y = 0;
+			if (width && height)
+				SDL_BlitSurface(surface, &srcrec, drawSurface, &dstrec);
+			else
+				SDL_BlitSurface(surface, NULL, drawSurface, &dstrec);
             SDL_FreeSurface(surface);
         }
     }

@@ -34,6 +34,7 @@ namespace Skin
         
     private:
         Color set(int r, int g, int b, double a) const;
+		void set(int red, int green, int blue, double alpha);
         
     };
 }

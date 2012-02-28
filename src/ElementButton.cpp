@@ -23,9 +23,15 @@ ElementButton::~ElementButton()
 
 void ElementButton::parse(const std::string& key, const std::string& value)
 {
+	std::string sContent("content");
 	std::string sImg("img-");
 	std::string sFont("font-");
-	if (key.find(sImg) == 0)
+
+	if (key.find(sContent) == 0)
+	{
+		mLabel.setText(value);
+	}
+	else if (key.find(sImg) == 0)
 	{
 		std::string subkey = key.substr(sImg.size());
 		std::string sOnIdle("onidle-");

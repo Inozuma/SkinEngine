@@ -23,9 +23,14 @@ ElementLabel::~ElementLabel()
 
 void ElementLabel::parse(const std::string& key, const std::string& value)
 {
+	std::string sContent("content");
 	std::string sFont("font-");
 
-	if (key.find(sFont) == 0)
+	if (key.find(sContent) == 0)
+	{
+		mLabel.setText(value);
+	}
+	else if (key.find(sFont) == 0)
 	{
 		mLabel.parse(key.substr(sFont.size()), value);
 	}

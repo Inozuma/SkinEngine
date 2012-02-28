@@ -131,6 +131,8 @@ namespace Skin
 		void parseSkinResolution(XMLNode*);
 		void parseSkinScreen(XMLNode*);
 		void parseSkinElement(XMLNode*);
+		void parseSkinElementValue(XMLNode*);
+		void parseSkinElementContent(XMLNode*);
 		void parseSkinElementFont(XMLNode*);
 		void parseSkinElementImg(XMLNode*);
 		void parseSkinElementSize(XMLNode*);

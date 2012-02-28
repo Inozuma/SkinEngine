@@ -195,7 +195,7 @@ void Engine::update(double time)
 
 void Engine::draw()
 {
-    SDL_FillRect(mDisplaySurface, NULL, 0x000000);
+    //SDL_FillRect(mDisplaySurface, NULL, 0x000000);
 	if (mActiveScreen.size())
 		this->mScreens[this->mActiveScreen]->draw(mDisplaySurface);
     SDL_Flip(mDisplaySurface);
@@ -333,6 +333,9 @@ void Engine::setupParserSkin()
 	skinElement->addAttribute("y");
 	skinElement->addAttribute("id");
 	skinElement->addAttribute("type");
+	Node* skinElementValue = skinElement->createChild("value");
+	skinElementValue->addAttribute("type", false);
+	Node* skinElementContent = skinElement->createChild("content");
 	Node* skinElementFont = skinElement->createChild("font");
 	skinElementFont->addAttribute("name");
 	skinElementFont->addAttribute("size");
@@ -373,6 +376,8 @@ void Engine::setupParserSkin()
 	skinResolution->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinResolution));
 	skinScreen->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinScreen));
 	skinElement->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElement));
+	skinElementContent->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElementContent));
+	skinElementValue->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElementValue));
 	skinElementFont->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElementFont));
 	skinElementImg->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElementImg));
 	skinElementSize->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinElementSize));
@@ -494,6 +499,51 @@ void Engine::parseSkinElement(XMLNode* node)
 			}
 
 			screen->addElement(id, element);
+		}
+	}
+}
+
+void Engine::parseSkinElementValue(XMLNode* node)
+{
+	XMLAttribute* attrType = node->first_attribute("type");
+
+	XMLNode* nodeElement = node->parent();
+	XMLNode* nodeScreen = nodeElement->parent();
+
+	if (nodeElement && nodeScreen)
+	{
+		XMLAttribute* attrID = nodeElement->first_attribute("id");
+		XMLAttribute* attrScreenName =  nodeScreen->first_attribute("name");
+		std::string screenName = attrScreenName->value();
+		int id = atoi(attrID->value());
+
+		Element* element = mScreens[screenName]->getElement(id);
+		if (element)
+		{
+			if (attrType)
+				element->parse("value-" + std::string(attrType->value()), node->value());
+			else
+				element->parse("value", node->value());
+		}
+	}
+}
+
+void Engine::parseSkinElementContent(XMLNode* node)
+{
+	XMLNode* nodeElement = node->parent();
+	XMLNode* nodeScreen = nodeElement->parent();
+
+	if (nodeElement && nodeScreen)
+	{
+		XMLAttribute* attrID = nodeElement->first_attribute("id");
+		XMLAttribute* attrScreenName =  nodeScreen->first_attribute("name");
+		std::string screenName = attrScreenName->value();
+		int id = atoi(attrID->value());
+
+		Element* element = mScreens[screenName]->getElement(id);
+		if (element)
+		{
+			element->parse("content", node->value());
 		}
 	}
 }
@@ -668,7 +718,14 @@ void Engine::parseSkinAction(XMLNode* node)
 			Element* element = mScreens[screenName]->getElement(id);
 			if (element)
 			{
-				if (std::for_each<std::string::iterator, int (*)(int)>(value.begin(), value.end(), isdigit))
+				bool isFocus = true;
+				for (std::string::iterator it = value.begin(); it != value.end(); ++it)
+					if (isdigit(*it) == 0)
+					{
+						isFocus = false;
+						break ;
+					}
+				if (isFocus)
 					element->addAction(attrEvent->value(), new ActionFocus(*element, atoi(value.c_str())));
 				else
 					element->addAction(attrEvent->value(), new ActionCallback(*element, value));

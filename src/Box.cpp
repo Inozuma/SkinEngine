@@ -92,8 +92,8 @@ void Box::parse(const std::string& key, const std::string& value)
 {
 	if (key == "radius")
 		setRadius(atoi(value.c_str()));
-	else if (key == "inlinecolor")
+	else if (key == "bg-color")
 		setBoxColor(value);
-	else if (key == "outlinecolor")
+	else if (key == "border-color")
 		setOutlineColor(value);
 }

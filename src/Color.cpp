@@ -42,16 +42,16 @@ a(1)
 		for (int i = 0; i < lstr.size(); ++i)
 			lstr[i] = tolower(str[i]);
 
-		uint8_t red;
-		uint8_t green;
-		uint8_t blue;
+		unsigned int red;
+		unsigned int green;
+		unsigned int blue;
 		double alpha = 1;
 		std::stringstream ssred;
 		std::stringstream ssgreen;
 		std::stringstream ssblue;
-		ssred << lstr.substr(1, 3);
-		ssgreen << lstr.substr(3, 5);
-		ssblue << lstr.substr(5, 7);
+		ssred << std::hex << lstr.substr(1, 2);
+		ssgreen << std::hex << lstr.substr(3, 2);
+		ssblue << std::hex << lstr.substr(5, 2);
 		ssred >> red;
 		ssgreen >> green;
 		ssblue >> blue;
@@ -74,7 +74,7 @@ a(1)
 	else if (str == "black")
 		set(0, 0, 0, 1);
 	else if (str == "white")
-		set(1, 1, 1, 1);
+		set(255, 255, 255, 1);
 }
 
 Color Color::operator +(const Color& rhs) const
@@ -132,4 +132,28 @@ Color Color::set(int r, int g, int b, double a) const
     else if (a < 0)
         a = 0;
     return Color(r, g, b, a);
+}
+
+void Color::set(int red, int green, int blue, double alpha)
+{
+	r = red;
+	g = green;
+	b = blue;
+	a = alpha;
+    if (r > 255)
+        r = 255;
+    else if (r < 0)
+        r = 0;
+    if (g > 255)
+        g = 255;
+    else if (g < 0)
+        g = 0;
+    if (b > 255)
+        b = 255;
+    else if (b < 0)
+        b = 0;
+    if (a > 255)
+        a = 1;
+    else if (a < 0)
+        a = 0;
 }
