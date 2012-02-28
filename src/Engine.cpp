@@ -128,6 +128,7 @@ bool Engine::init()
 	}
 
     // Init SDL
+	SDL_Init(SDL_INIT_EVERYTHING);
     int flags = SDL_HWSURFACE | SDL_DOUBLEBUF;
     flags |= mFullscreen ? SDL_FULLSCREEN : 0;
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -187,8 +188,30 @@ void Engine::update(double time)
 	if (mActiveScreen.size())
 	{
 		SDL_Event event;
+		Screen* screen = this->mScreens[this->mActiveScreen];
 		while (SDL_PollEvent(&event))
-		    this->mScreens[this->mActiveScreen]->event(event);
+		{
+			switch (event.type)
+			{
+			case SDL_KEYDOWN:
+				screen->eventKeyPressed(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
+				break;
+			case SDL_KEYUP:
+				screen->eventKeyReleased(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				screen->eventMouseButtonPressed(EventMouseButton(event.button.button, event.button.x, event.button.y));
+				break;
+			case SDL_MOUSEMOTION:
+				screen->eventMouseMoved(EventMouseMotion(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel, (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0));
+			case SDL_QUIT:
+				//screen->eventQuit();
+				(void)screen;
+				break;
+			default:
+				break;
+			}
+		}
 		this->mScreens[this->mActiveScreen]->update(time);
 	}
 }
@@ -201,6 +224,54 @@ void Engine::draw()
     SDL_Flip(mDisplaySurface);
 }
 
+void Engine::inject(Input input)
+{
+	if (mActiveScreen.size())
+	{
+		EventKey e;
+
+		switch (input)
+		{
+		case UP:
+			e.sym = SDLK_UP;
+			break;
+
+		case DOWN:
+			e.sym = SDLK_DOWN;
+			break;
+
+		case LEFT:
+			e.sym = SDLK_LEFT;
+			break;
+
+		case RIGHT:
+			e.sym = SDLK_RIGHT;
+			break;
+
+		case OK:
+			e.sym = SDLK_RETURN;
+			break;
+
+		case CANCEL:
+			e.sym = SDLK_ESCAPE;
+			break;
+		}
+		mScreens[mActiveScreen]->eventKeyPressed(e);
+	}
+}
+
+void Engine::inject(char c)
+{
+	if (mActiveScreen.size())
+	{
+		EventKey e;
+
+		e.unicode = c;
+
+		mScreens[mActiveScreen]->eventKeyPressed(e);
+	}
+}
+
 void Engine::Callback(const ModuleParameter& moduleParameter)
 {
     if (moduleParameter.function == "Quit")
@@ -211,6 +282,7 @@ void Engine::Callback(const ModuleParameter& moduleParameter)
 
 void Engine::run()
 {
+	this->init();
     double oldTime = 0;
 
     while (mRunning)
@@ -783,7 +855,7 @@ void Engine::parseSkinEffectTranslate(Effect* effect, XMLNode* node)
 
 void Engine::parseSkinEffectRotate(Effect* effect, XMLNode* node)
 {
-	XMLAttribute* attrAngle = node->first_attribute("x");
+	XMLAttribute* attrAngle = node->first_attribute("angle");
 	double angle = attrAngle ? atof(attrAngle->value()) : 0;
 
 	effect->setRotation(angle);

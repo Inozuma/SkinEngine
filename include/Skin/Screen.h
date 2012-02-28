@@ -10,6 +10,7 @@
 
 #include "Skin/Element.h"
 #include "Skin/Image.h"
+#include "Skin/Events.h"
 
 #include <map>
 #include <string>
@@ -45,11 +46,17 @@ namespace Skin
         void deleteElement(int);
         Element* getElement(int);
         
+		int getActiveElement() const;
         void setActiveElement(int);
         
         void setBackground(const std::string&);
 
-        void event(const SDL_Event&);
+		void eventQuit();
+		void eventKeyPressed(EventKey const &);
+		void eventKeyReleased(EventKey const &);
+		void eventMouseButtonPressed(EventMouseButton const &);
+		void eventMouseButtonReleased(EventMouseButton const &);
+		void eventMouseMoved(EventMouseMotion const &);
         void update(double);
         void draw(SDL_Surface* displaySurface);
         

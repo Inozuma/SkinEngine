@@ -75,7 +75,7 @@ void ActionCallback::execute()
         
         // parse parameters
         param.function = mParameter.function;
-        for (std::list<std::string>::iterator it = mParameter.parameters.begin();
+        for (std::vector<std::string>::iterator it = mParameter.parameters.begin();
                 it != mParameter.parameters.end(); ++it)
         {
             param.parameters.push_back(this->parseParameter(*it));

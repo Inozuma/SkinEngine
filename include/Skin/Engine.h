@@ -47,6 +47,16 @@ struct SDL_mutex;
 
 namespace Skin
 {
+	enum Input
+	{
+		UP = 0,
+		DOWN,
+		LEFT,
+		RIGHT,
+		OK,
+		CANCEL
+	};
+
     class Engine : public Module, public ParserListener
     {
     private:
@@ -103,6 +113,8 @@ namespace Skin
 		SKINENGINE_API void launch(bool);
         SKINENGINE_API void update(double);
         SKINENGINE_API void draw();
+		SKINENGINE_API void inject(Input);
+		SKINENGINE_API void inject(char);
         
         // Callback
         SKINENGINE_API void Callback(const ModuleParameter &);

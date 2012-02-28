@@ -129,37 +129,41 @@ void Element::parse(const std::string& key, const std::string& value)
 	}
 }
 
-void Element::event(const SDL_Event& event)
+void Element::eventKey(const EventKey& key)
 {
-    // TODO : Mouse?
-    if (event.type == SDL_KEYDOWN)
+	switch (key.sym)
     {
-        switch (event.key.keysym.sym)
-        {
-            case SDLK_UP:
-                this->onUp();
-                break;
+        case SDLK_UP:
+            this->onUp();
+            break;
 
-            case SDLK_DOWN:
-                this->onDown();
-                break;
+        case SDLK_DOWN:
+            this->onDown();
+            break;
 
-            case SDLK_LEFT:
-                this->onLeft();
-                break;
+        case SDLK_LEFT:
+            this->onLeft();
+            break;
 
-            case SDLK_RIGHT:
-                this->onRight();
-                break;
+        case SDLK_RIGHT:
+            this->onRight();
+            break;
 
-            case SDLK_RETURN:
-                this->onSelect();
-                break;
+        case SDLK_RETURN:
+            this->onSelect();
+            break;
 
-            default:
-                break;
-        }
+        default:
+            break;
     }
+}
+
+void Element::eventMouseButton(const EventMouseButton&)
+{
+}
+
+void Element::eventMouseMoved(const EventMouseMotion&)
+{
 }
 
 void Element::update(double time)

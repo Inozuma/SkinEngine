@@ -36,7 +36,7 @@ namespace Skin
 		virtual void parse(const std::string&, const std::string&);
         virtual bool collide(double x, double y);
         virtual void draw(SDL_Surface* displaySurface);
-        virtual void event(const SDL_Event&);
+		virtual void eventKey(const EventKey &);
         
         virtual void onFocus();
         virtual void onIdle();

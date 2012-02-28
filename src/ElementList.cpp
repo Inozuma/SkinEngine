@@ -110,7 +110,7 @@ void ElementList::draw(SDL_Surface* displaySurface)
         hl.setSize(mBoxsize.x, mFont.getMaxHeight() + mFont.getMaxHeight() / 2);
         hl.draw(displaySurface);
 	}
-    for (int i = 0; i < (signed)mValues.size(); ++i)
+    for (int i = 0; i + mOffset < (signed)mValues.size(); ++i)
     {
         Text text(mValues[i + mOffset]);
 

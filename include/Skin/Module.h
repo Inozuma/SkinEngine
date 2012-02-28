@@ -10,7 +10,7 @@
 
 #include "Skin/DynamicData.h"
 
-#include <list>
+#include <vector>
 #include <string>
 
 #if defined(SKINENGINE_EXPORT)
@@ -25,7 +25,7 @@ namespace Skin
     struct ModuleParameter
     {
         std::string function;
-        std::list<std::string> parameters;
+        std::vector<std::string> parameters;
     };
 
     class Module

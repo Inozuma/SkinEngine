@@ -89,6 +89,7 @@
     <ClInclude Include="include\Skin\ElementList.h" />
     <ClInclude Include="include\Skin\ElementVideo.h" />
     <ClInclude Include="include\Skin\Engine.h" />
+    <ClInclude Include="include\Skin\Events.h" />
     <ClInclude Include="include\Skin\Filesystem\Directory.h" />
     <ClInclude Include="include\Skin\Filesystem\File.h" />
     <ClInclude Include="include\Skin\Image.h" />

@@ -86,29 +86,26 @@ void ElementInput::draw(SDL_Surface* displaySurface)
     mLabel.draw(displaySurface);
 }
 
-void ElementInput::event(const SDL_Event& event)
+void ElementInput::eventKey(const EventKey& key)
 {
-    if (event.type == SDL_KEYDOWN
-            && event.key.keysym.sym != SDLK_RETURN
-            && event.key.keysym.sym != SDLK_BACKSPACE
-            && event.key.keysym.sym != SDLK_DELETE
-            && event.key.keysym.unicode != 0
-            && event.key.keysym.unicode != '\r'
-            && event.key.keysym.unicode != '\n'
-            && event.key.keysym.unicode != '\b')
+    if (key.sym != SDLK_RETURN
+		&& key.sym != SDLK_BACKSPACE
+		&& key.sym != SDLK_DELETE
+		&& key.unicode != 0
+		&& key.unicode != '\r'
+		&& key.unicode != '\n'
+		&& key.unicode != '\b')
     {
-        if (event.key.keysym.sym != SDLK_BACKSPACE)
-            mText.push_back(static_cast<char>(event.key.keysym.unicode));
+        if (key.sym != SDLK_BACKSPACE)
+            mText.push_back(static_cast<char>(key.unicode));
     }
-    else if (event.type == SDL_KEYDOWN)
-    {
-        if ((event.key.keysym.sym == SDLK_BACKSPACE || event.key.keysym.sym == SDLK_DELETE)
-                && !mText.empty())
-        {
-            mText.resize(mText.size() - 1);
-        }
-        else
-            Element::event(event);
+	else if ((key.sym == SDLK_BACKSPACE || key.sym == SDLK_DELETE) && !mText.empty())
+	{
+		mText.resize(mText.size() - 1);
+	}
+    else
+	{
+		Element::eventKey(key);
     }
 }
 

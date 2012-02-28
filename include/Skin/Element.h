@@ -12,6 +12,7 @@
 #include "Skin/Action.h"
 #include "Skin/Effect.h"
 #include "Skin/Color.h"
+#include "Skin/Events.h"
 #include "Skin/Parser/Node.h"
 
 // need proper abstraction
@@ -81,7 +82,9 @@ namespace Skin
         const Vectorf & getScale() const;
 
 		virtual void parse(const std::string&, const std::string&);
-        virtual void event(const SDL_Event &);
+		virtual void eventKey(const EventKey &);
+		virtual void eventMouseButton(const EventMouseButton &);
+		virtual void eventMouseMoved(const EventMouseMotion &);
         virtual void update(double);
         virtual void draw(SDL_Surface*) = 0;
         virtual bool collide(double, double) = 0;
