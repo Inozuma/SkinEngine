@@ -57,20 +57,23 @@ void ElementVideo::draw(SDL_Surface* displaySurface)
 {
 	if (mMutex == NULL)
 		parseDynamicDataMutex();
-	parseDynamicDataSurface();
+	if (mSurface == NULL)
+		parseDynamicDataSurface();
 
-	if (mMutex && mSurface)
+	if (mSurface)
 	{
-		SDL_LockMutex(mMutex);
+		if (mMutex)
+			SDL_LockMutex(mMutex);
 		SDL_Rect pos;
-		SDL_Surface* zoomedSurface = zoomSurface(mSurface, mWidth / double(mSurface->w), mHeight / double(mSurface->h), 0);
+		SDL_Surface* zoomedSurface = zoomSurface(mSurface, mWidth / double(mSurface->w), mHeight / double(mSurface->h), 1);
 		pos.x = static_cast<Sint16>(mPosition.x);
 		pos.y = static_cast<Sint16>(mPosition.y);
-		pos.w = mWidth;
-		pos.h = mHeight;
+		pos.w = 0;
+		pos.h = 0;
 		SDL_BlitSurface(zoomedSurface, NULL, displaySurface, &pos);
 		SDL_FreeSurface(zoomedSurface);
-		SDL_UnlockMutex(mMutex);
+		if (mMutex)
+			SDL_UnlockMutex(mMutex);
 	}
 }
 

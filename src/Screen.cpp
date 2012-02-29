@@ -69,6 +69,14 @@ void Screen::setActiveElement(int id)
     }
 }
 
+bool Screen::isBusy() const
+{
+	for (ElementMap::const_iterator it = mElements.begin(); it != mElements.end(); ++it)
+		if (it->second->isBusy())
+			return true;
+	return false;
+}
+
 void Screen::setBackground(const std::string& file)
 {
 	if (mBackground.openFile(file))
@@ -143,12 +151,14 @@ void Screen::eventMouseMoved(EventMouseMotion const & motion)
 
 void Screen::onLoad()
 {
-    // TODO
+	for (ElementMap::iterator it = mElements.begin(); it != mElements.end(); ++it)
+		it->second->onLoad();
 }
 
 void Screen::onUnload()
 {
-    // TODO
+    for (ElementMap::iterator it = mElements.begin(); it != mElements.end(); ++it)
+		it->second->onUnload();
 }
 
 void Screen::onEscape()

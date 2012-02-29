@@ -187,32 +187,47 @@ void Engine::update(double time)
 {
 	if (mActiveScreen.size())
 	{
-		SDL_Event event;
-		Screen* screen = this->mScreens[this->mActiveScreen];
-		while (SDL_PollEvent(&event))
+		if (mNextScreen.empty())
 		{
-			switch (event.type)
+			SDL_Event event;
+			Screen* screen = this->mScreens[this->mActiveScreen];
+			while (SDL_PollEvent(&event))
 			{
-			case SDL_KEYDOWN:
-				screen->eventKeyPressed(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
-				break;
-			case SDL_KEYUP:
-				screen->eventKeyReleased(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				screen->eventMouseButtonPressed(EventMouseButton(event.button.button, event.button.x, event.button.y));
-				break;
-			case SDL_MOUSEMOTION:
-				screen->eventMouseMoved(EventMouseMotion(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel, (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0));
-			case SDL_QUIT:
-				//screen->eventQuit();
-				(void)screen;
-				break;
-			default:
-				break;
+				switch (event.type)
+				{
+				case SDL_KEYDOWN:
+					screen->eventKeyPressed(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
+					break;
+				case SDL_KEYUP:
+					screen->eventKeyReleased(EventKey(event.key.keysym.sym, event.key.keysym.unicode));
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					screen->eventMouseButtonPressed(EventMouseButton(event.button.button, event.button.x, event.button.y));
+					break;
+				case SDL_MOUSEMOTION:
+					screen->eventMouseMoved(EventMouseMotion(event.motion.x, event.motion.y, event.motion.xrel, event.motion.yrel, (event.motion.state & SDL_BUTTON(SDL_BUTTON_LEFT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_RIGHT)) != 0, (event.motion.state & SDL_BUTTON(SDL_BUTTON_MIDDLE)) != 0));
+				case SDL_QUIT:
+					//screen->eventQuit();
+					(void)screen;
+					break;
+				default:
+					break;
+				}
 			}
 		}
-		this->mScreens[this->mActiveScreen]->update(time);
+		else if (mScreens[mActiveScreen]->isBusy() == false)
+		{
+			if (mActiveScreen != mNextScreen)
+			{
+				this->changeScreen(mNextScreen);
+				mScreens[mActiveScreen]->onLoad();
+			}
+			else
+			{
+				mNextScreen = "";
+			}
+		}
+		mScreens[mActiveScreen]->update(time);
 	}
 }
 
@@ -277,7 +292,13 @@ void Engine::Callback(const ModuleParameter& moduleParameter)
     if (moduleParameter.function == "Quit")
         this->quit();
     else if (moduleParameter.function == "ChangeScreen")
-        this->changeScreen(moduleParameter.parameters.front());
+	{
+		if (mActiveScreen.size())
+		{
+			mNextScreen = moduleParameter.parameters[0];
+			mScreens[mActiveScreen]->onUnload();
+		}
+	}
 }
 
 void Engine::run()
@@ -436,11 +457,16 @@ void Engine::setupParserSkin()
 	Node* skinEffectTranslate = skinEffect->createChild("translate");
 	skinEffectTranslate->addAttribute("x", true);
 	skinEffectTranslate->addAttribute("y", true);
+	skinEffectTranslate->addAttribute("startx", false);
+	skinEffectTranslate->addAttribute("starty", false);
 	Node* skinEffectRotate = skinEffect->createChild("rotate");
 	skinEffectRotate->addAttribute("angle", true);
+	skinEffectRotate->addAttribute("startangle", false);
 	Node* skinEffectScale = skinEffect->createChild("scale");
 	skinEffectScale->addAttribute("x", true);
 	skinEffectScale->addAttribute("y", true);
+	skinEffectScale->addAttribute("startx", true);
+	skinEffectScale->addAttribute("starty", true);
 	skinVersion->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinVersion));
 	skinAuthor->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinAuthor));
 	skinDescription->setCallback(this, static_cast<NodeCallback>(&Engine::parseSkinDescription));
@@ -847,28 +873,41 @@ void Engine::parseSkinEffectTranslate(Effect* effect, XMLNode* node)
 {
 	XMLAttribute* attrX = node->first_attribute("x");
 	XMLAttribute* attrY = node->first_attribute("y");
+	XMLAttribute* attrStartX = node->first_attribute("startx");
+	XMLAttribute* attrStartY = node->first_attribute("starty");
 	double x = attrX ? atof(attrX->value()) : 0;
 	double y = attrY ? atof(attrY->value()) : 0;
+	double startx = attrStartX ? atof(attrStartX->value()) : 0;
+	double starty = attrStartY ? atof(attrStartY->value()) : 0;
 
 	effect->setTranslation(Vectorf(x, y));
+	effect->setStartPosition(Vectorf(startx, starty));
 }
 
 void Engine::parseSkinEffectRotate(Effect* effect, XMLNode* node)
 {
 	XMLAttribute* attrAngle = node->first_attribute("angle");
+	XMLAttribute* attrStartAngle = node->first_attribute("startangle");
 	double angle = attrAngle ? atof(attrAngle->value()) : 0;
+	double startAngle = attrStartAngle ? atof(attrStartAngle->value()) : 0;
 
 	effect->setRotation(angle);
+	effect->setStartAngle(startAngle);
 }
 
 void Engine::parseSkinEffectScale(Effect* effect, XMLNode* node)
 {
 	XMLAttribute* attrX = node->first_attribute("x");
 	XMLAttribute* attrY = node->first_attribute("y");
+	XMLAttribute* attrStartX = node->first_attribute("startx");
+	XMLAttribute* attrStartY = node->first_attribute("starty");
 	double x = attrX ? atof(attrX->value()) : 0;
 	double y = attrY ? atof(attrY->value()) : 0;
+	double startx = attrStartX ? atof(attrStartX->value()) : 0;
+	double starty = attrStartY ? atof(attrStartY->value()) : 0;
 
 	effect->setScale(Vectorf(x, y));
+	effect->setStartScale(Vectorf(startx, starty));
 }
 
 void Engine::parseSkinEffectColor(Effect* effect, XMLNode* node)

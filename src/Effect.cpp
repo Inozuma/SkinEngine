@@ -70,6 +70,26 @@ const Vectorf& Effect::getTranslation() const
     return mTranslation;
 }
 
+void Effect::setStartScale(const Vectorf& scale)
+{
+	mStartScale = scale;
+}
+
+void Effect::setStartAngle(double angle)
+{
+	mStartAngle = angle;
+}
+
+void Effect::setStartPosition(const Vectorf& position)
+{
+	mStartPosition = position;
+}
+
+void Effect::setStartColor(const Color& color)
+{
+	mStartColor = color;
+}
+
 void Effect::setEnd(double mEnd)
 {
     this->mEnd = mEnd;
@@ -98,24 +118,31 @@ bool Effect::isActive() const
 template<>
 void Effect::update<Element>(Element& element, double time)
 {
-    if (this->mActive)
+    if (mActive)
     {
-        this->mTime += time;
-        if (this->mTime >= this->mStart && this->mTime < this->mEnd)
+		if (mTime == 0)
+		{
+			element.setTranslation(mStartPosition);
+			element.setRotation(mStartAngle);
+			element.setScale(mStartScale);
+			element.setColorize(mStartColor);
+		}
+        mTime += time;
+        if (mTime >= mStart && mTime < mEnd)
         {
-            double pos = (this->mTime - this->mStart) / this->mLength;
-            element.setTranslation(element.getTranslation() + this->mTranslation * pos);
-            element.setRotation(element.getRotation() + this->mRotation * pos);
-            element.setScale(element.getScale() + this->mScale * pos);
-			element.setColorize(element.getColorize() + this->mColor * pos);
+            double pos = (mTime - mStart) / mLength;
+            element.setTranslation(mStartPosition + mTranslation * pos);
+            element.setRotation(mStartAngle + mRotation * pos);
+            element.setScale(mStartScale + mScale * pos);
+			element.setColorize(mStartColor + mColor * pos);
         }
-        else if (this->mTime >= this->mEnd)
+        else if (mTime >= mEnd)
         {
-            element.setTranslation(element.getTranslation() + this->mTranslation);
-            element.setRotation(element.getRotation() + this->mRotation);
-            element.setScale(element.getScale() + this->mScale);
-			element.setColorize(element.getColorize() + this->mColor);
-            this->mActive = false;
+            element.setTranslation(mStartPosition + mTranslation);
+            element.setRotation(mStartAngle + mRotation);
+            element.setScale(mStartScale + mScale);
+			element.setColorize(mStartColor + mColor);
+            mActive = false;
         }
     }
 }

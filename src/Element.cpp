@@ -45,6 +45,11 @@ bool Element::isDynamic() const
     return mDynamic;
 }
 
+bool Element::isBusy() const
+{
+	return !mActiveEffects.empty();
+}
+
 void Element::addEffect(const std::string& eventName, Effect* effect)
 {
     mEffects[eventName].push_back(effect);
@@ -170,11 +175,6 @@ void Element::update(double time)
 {
     if (!this->mActiveEffects.empty())
     {
-        mEffectColor = Color(0, 0, 0, 0);
-        mTranslation = Vectorf();
-        mRotation = 0;
-        mScale = Vectorf();
-
         EffectList& currentEffects = this->mActiveEffects.front();
 
         for (EffectList::iterator it = currentEffects.begin();
@@ -334,6 +334,48 @@ void Element::onUnfocus()
     // execute actions
     for (ActionList::iterator it = this->mActions["onUnfocus"].begin();
             it != this->mActions["onUnfocus"].end(); ++it)
+    {
+        (*it)->execute();
+    }
+}
+
+void Element::onLoad()
+{
+    // add effects
+	if (mEffects["onLoad"].size())
+	{
+		EffectList copy;
+		for (EffectList::iterator it = this->mEffects["onLoad"].begin();
+				it != this->mEffects["onLoad"].end(); ++it)
+		{
+			copy.push_back(new Effect(**it));
+		}
+		this->mActiveEffects.push_back(copy);
+	}
+    // execute actions
+    for (ActionList::iterator it = this->mActions["onLoad"].begin();
+            it != this->mActions["onLoad"].end(); ++it)
+    {
+        (*it)->execute();
+    }
+}
+
+void Element::onUnload()
+{
+    // add effects
+	if (mEffects["onUnload"].size())
+	{
+		EffectList copy;
+		for (EffectList::iterator it = this->mEffects["onUnload"].begin();
+				it != this->mEffects["onUnload"].end(); ++it)
+		{
+			copy.push_back(new Effect(**it));
+		}
+		this->mActiveEffects.push_back(copy);
+	}
+    // execute actions
+    for (ActionList::iterator it = this->mActions["onUnload"].begin();
+            it != this->mActions["onUnload"].end(); ++it)
     {
         (*it)->execute();
     }
