@@ -48,6 +48,8 @@ namespace Skin
         
 		int getActiveElement() const;
         void setActiveElement(int);
+
+		bool isBusy() const;
         
         void setBackground(const std::string&);
 

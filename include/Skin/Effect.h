@@ -26,6 +26,11 @@ namespace Skin
         double mEnd;
         double mLength;
         
+		Vectorf mStartPosition;
+		double mStartAngle;
+		Vectorf mStartScale;
+		Color mStartColor;
+
         Vectorf mTranslation;
         double mRotation;
         Vectorf mScale;
@@ -48,6 +53,14 @@ namespace Skin
         
         void setTranslation(const Vectorf&);
         const Vectorf& getTranslation() const;
+
+		void setStartScale(const Vectorf&);
+
+		void setStartAngle(double);
+
+		void setStartPosition(const Vectorf&);
+
+		void setStartColor(const Color&);
         
         void setEnd(double mEnd);
         double getEnd() const;

@@ -28,7 +28,7 @@ mSize(0)
 				mPath = bfs::absolute(p).string();
 				mExtension = p.extension().string();
 				mRelativePath = p.relative_path().string();
-				mSize = bfs::file_size(p);
+				mSize = static_cast<unsigned int>(bfs::file_size(p));
 			}
 		}
 	}

@@ -12,7 +12,7 @@ namespace Skin
 		std::string mPath;
 		std::string mExtension;
 		std::string mRelativePath;
-		int mSize;
+		unsigned int mSize;
 
 	public:
 		File();

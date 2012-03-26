@@ -91,6 +91,7 @@ namespace Skin
         bool mRunning;
         ScreenMap mScreens;
         std::string mActiveScreen;
+		std::string mNextScreen;
         SDL_Surface* mDisplaySurface;
 		SDL_mutex *mMutex;
 

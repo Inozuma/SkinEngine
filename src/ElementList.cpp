@@ -11,6 +11,8 @@
 #include "Skin/Screen.h"
 #include "Skin/Engine.h"
 
+#include <sigc++/functors/mem_fun.h>
+
 using namespace Skin;
 
 ElementList::ElementList(Screen& screen, const Vectorf& position,
@@ -59,7 +61,12 @@ void ElementList::parse(const std::string& key, const std::string& value)
 {
 	if (key == "value")
 	{
-		mValue = value;
+		if (parseDynamicData(value) == true)
+		{
+			mValue = value;
+			Module *module = mScreen.getCore().getModule(mModuleName);
+			module->dataChangedSignal.connect(sigc::mem_fun(this, &ElementList::dataChangedSlot));
+		}
 	}
 	else
 	{
@@ -128,7 +135,7 @@ void ElementList::draw(SDL_Surface* displaySurface)
 
 void ElementList::update(double time)
 {
-    parseDynamicData();
+    //parseDynamicData();
     Element::update(time);
 }
 
@@ -167,18 +174,33 @@ void ElementList::onDown()
     }
 }
 
-void ElementList::parseDynamicData()
+bool ElementList::parseDynamicData(const std::string & value)
 {
     size_t pos;
 
-    if ((pos = mValue.find('.')) == std::string::npos)
-        return ;
+    if ((pos = value.find('.')) == std::string::npos)
+        return false;
 
-    std::string moduleName = mValue.substr(0, pos);
-    std::string dataName = mValue.substr(pos + 1, mValue.size() - 1);
+    mModuleName = value.substr(0, pos);
+    mDataName = value.substr(pos + 1, value.size() - 1);
 
-    Module* module = mScreen.getCore().getModule(moduleName);
+    Module* module = mScreen.getCore().getModule(mModuleName);
     if (module)
-        mValues = module->getDynamicData<std::vector<std::string> >(dataName);
-    return ;
+	{
+        mValues = module->getDynamicData<std::vector<std::string> >(mDataName);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void ElementList::dataChangedSlot(const std::string & name)
+{
+	if (name == mDataName)
+	{
+		Module* module = mScreen.getCore().getModule(mModuleName);
+		mValues = module->getDynamicData<std::vector<std::string> >(mDataName);
+	}
 }

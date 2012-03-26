@@ -128,7 +128,6 @@ bool Engine::init()
 	}
 
     // Init SDL
-	SDL_Init(SDL_INIT_EVERYTHING);
     int flags = SDL_HWSURFACE | SDL_DOUBLEBUF;
     flags |= mFullscreen ? SDL_FULLSCREEN : 0;
     SDL_Init(SDL_INIT_EVERYTHING);

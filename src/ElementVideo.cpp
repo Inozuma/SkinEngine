@@ -30,9 +30,15 @@ void ElementVideo::parse(const std::string& key, const std::string& value)
 		std::string subkey(key.substr(sValue.size()));
 
 		if (subkey == "video")
+		{
 			mValueSurface = value;
+			parseDynamicDataSurface();
+		}
 		else if (subkey == "mutex")
+		{
 			mValueMutex = value;
+			parseDynamicDataMutex();
+		}
 	}
 	else if (key.find(sSize) == 0)
 	{
@@ -55,11 +61,6 @@ bool ElementVideo::collide(double x, double y)
 
 void ElementVideo::draw(SDL_Surface* displaySurface)
 {
-	if (mMutex == NULL)
-		parseDynamicDataMutex();
-	if (mSurface == NULL)
-		parseDynamicDataSurface();
-
 	if (mSurface)
 	{
 		if (mMutex)
@@ -75,6 +76,11 @@ void ElementVideo::draw(SDL_Surface* displaySurface)
 		if (mMutex)
 			SDL_UnlockMutex(mMutex);
 	}
+	else
+	{
+		parseDynamicDataSurface();
+		parseDynamicDataMutex();
+	}
 }
 
 void ElementVideo::parseDynamicDataSurface()
@@ -86,6 +92,7 @@ void ElementVideo::parseDynamicDataSurface()
 
     std::string moduleName = mValueSurface.substr(0, pos);
     std::string dataName = mValueSurface.substr(pos + 1, mValueSurface.size() - 1);
+	mDataSurface = dataName;
 
     Module* module = mScreen.getCore().getModule(moduleName);
     if (module)
@@ -102,9 +109,22 @@ void ElementVideo::parseDynamicDataMutex()
 
     std::string moduleName = mValueMutex.substr(0, pos);
     std::string dataName = mValueMutex.substr(pos + 1, mValueMutex.size() - 1);
+	mDataMutex = dataName;
 
     Module* module = mScreen.getCore().getModule(moduleName);
     if (module)
         mMutex = module->getDynamicData<SDL_mutex*>(dataName);
     return ;
+}
+
+void ElementVideo::dataSurfaceChangedSlot(const std::string & data)
+{
+	if (data == mDataSurface)
+		parseDynamicDataSurface();
+}
+
+void ElementVideo::dataMutexChangedSlot(const std::string & data)
+{
+	if (data == mDataMutex)
+		parseDynamicDataMutex();
 }

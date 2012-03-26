@@ -9,7 +9,9 @@ namespace Skin
 	{
 	private:
 		std::string mValueSurface;
+		std::string mDataSurface;
 		std::string mValueMutex;
+		std::string mDataMutex;
 		double mWidth;
 		double mHeight;
 
@@ -22,6 +24,9 @@ namespace Skin
 		virtual void parse(const std::string&, const std::string&);
         virtual bool collide(double x, double y);
         virtual void draw(SDL_Surface* displaySurface);
+
+		void dataSurfaceChangedSlot(const std::string & data);
+		void dataMutexChangedSlot(const std::string & data);
 
 	private:
 		void parseDynamicDataSurface();

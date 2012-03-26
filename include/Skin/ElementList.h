@@ -20,7 +20,7 @@
 namespace Skin
 {
 
-    class ElementList : public Element
+	class ElementList : public Element
     {
     private:
         std::vector<std::string> mValues;
@@ -32,6 +32,10 @@ namespace Skin
         int mIndex;
         int mOffset;
         unsigned int mMax;
+
+		// module info
+		std::string mModuleName;
+		std::string mDataName;
         
     public:
         ElementList(Screen&, const Vectorf&, const std::string& = "", const Vectorf& = Vectorf());
@@ -49,9 +53,12 @@ namespace Skin
         
         virtual void onUp();
         virtual void onDown();
+
+		// data slot to connect to module signal
+		void dataChangedSlot(const std::string & name);
         
     private:
-        void parseDynamicData();
+        bool parseDynamicData(const std::string & value);
     };
 }
 

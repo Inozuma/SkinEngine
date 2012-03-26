@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <string>
+#include <sigc++/signal.h>
 
 #if defined(SKINENGINE_EXPORT)
 # define SKINENGINE_API __declspec(dllexport)
@@ -28,8 +29,12 @@ namespace Skin
         std::vector<std::string> parameters;
     };
 
-    class Module
+	class Module
     {
+		//signals
+	public:
+		sigc::signal<void, const std::string &> dataChangedSignal;
+
     private:
         DynamicData mDynamicData;
 
@@ -49,8 +54,11 @@ namespace Skin
         
         template <class T>
         bool updateDynamicData(const std::string & name, T data)
-        {
-            return this->mDynamicData.updateData<T>(name, data);
+		{
+			bool result = this->mDynamicData.updateData<T>(name, data);
+			if (result)
+				dataChangedSignal(name);
+            return result;
         }
         
         bool deleteDynamicData(const std::string & name)

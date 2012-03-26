@@ -7,7 +7,7 @@
 #include <map>
 #include <string>
 
-#include <rapidxml\rapidxml.hpp>
+#include <rapidxml/rapidxml.hpp>
 
 namespace Skin
 {

@@ -15,6 +15,9 @@
 #include "Skin/Events.h"
 #include "Skin/Parser/Node.h"
 
+#include <sigc++/signal.h>
+#include <sigc++/trackable.h>
+
 // need proper abstraction
 struct SDL_Surface;
 union SDL_Event;
@@ -31,7 +34,7 @@ namespace Skin
 {
     class Screen;
 
-    class Element
+	class Element : public sigc::trackable
     {
     protected:
         Screen & mScreen;
@@ -59,6 +62,7 @@ namespace Skin
         virtual std::string getData(const std::string&);
 
         bool isDynamic() const;
+		bool isBusy() const;
 
         void addEffect(const std::string &, Effect*);
         void addAction(const std::string &, Action*);
@@ -100,6 +104,8 @@ namespace Skin
         virtual void onIdle();
         virtual void onFocus();
         virtual void onUnfocus();
+		virtual void onLoad();
+		virtual void onUnload();
     };
 };
 
